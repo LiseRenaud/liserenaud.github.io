@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Compétences</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/png" href="img/favicon.png">
+</head>
+<header>
+    <nav>
+        <div class="logo-container">
+            <img src="img/logo.png" alt="Logo" class="logo">
+        </div>
+        <div class="menu-toggle">☰</div>
+        <ul class="menu">
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="competences.html">Compétences</a></li>
+            <li><a href="parcours.html">Parcours</a></li>
+            <li><a href="projets.html">Projets</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+<body class="bg-gray-100">
+    <div 
+        x-data="competencesApp()" 
+        class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6"
+    >
+        <template x-for="(competences, categorie) in competencesParCategorie">
+            <div class="bg-white shadow-md rounded-lg p-6">
+                <h3 
+                    x-text="categorie" 
+                    class="text-xl font-bold mb-4 text-blue-700 border-b pb-2"
+                ></h3>
+                <div class="flex flex-wrap gap-3">
+                    <template x-for="competence in competences">
+                        <span 
+                            x-text="competence.nom"
+                            @click="ouvrirDetails(competence)"
+                            class="px-3 py-1 border border-blue-200 rounded-full text-sm cursor-pointer hover:bg-blue-50 transition-colors"
+                        ></span>
+                    </template>
+                </div>
+            </div>
+        </template>
+
+        <div class="bg-gray-50 p-6 rounded-lg shadow-md">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">Certifications</h2>
+            <div class="grid md:grid-cols-2 gap-4">
+                <template x-for="certification in certifications">
+                    <div class="bg-white border border-gray-200 p-4 rounded-md hover:shadow-sm transition-shadow">
+                        <h4 x-text="certification.nom" class="font-semibold text-blue-700"></h4>
+                        <p x-text="certification.organisme" class="text-sm text-gray-600"></p>
+                        <p class="text-sm text-gray-500">Année : <span x-text="certification.annee"></span></p>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <template x-if="competenceSelectionnee">
+            <div 
+                class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+                @click.self="competenceSelectionnee = null"
+            >
+                <div class="bg-white p-6 rounded-lg max-w-md w-full">
+                    <h2 
+                        x-text="competenceSelectionnee.nom" 
+                        class="text-xl font-bold mb-4 text-blue-700"
+                    ></h2>
+                    <p x-text="competenceSelectionnee.description"></p>
+                    <button 
+                        @click="competenceSelectionnee = null"
+                        class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                    >
+                        Fermer
+                    </button>
+                </div>
+            </div>
+        </template>
+    </div>
+
+    <script>
+        function competencesApp() {
+            return {
+                competencesParCategorie: {
+                    'Réseaux': [
+                        { nom: 'TCP/IP', description: 'Maîtrise des protocoles fondamentaux de communication réseau.' },
+                        { nom: 'Routage', description: 'Configuration de routeurs et gestion des tables de routage.' },
+                        { nom: 'Pare-feu', description: 'Administration de pare-feu et règles de sécurité réseau.' }
+                    ],
+                    'Télécommunication': [
+                        { nom: '5G', description: 'Architectures réseau 5G et technologies de communication mobile.' },
+                        { nom: 'Protocoles', description: 'Implémentation de protocoles HTTP, MQTT, SIP.' }
+                    ],
+                    'Programmation': [
+                        { nom: 'JavaScript', description: 'Développement web full-stack avec frameworks modernes.' },
+                        { nom: 'Python', description: 'Scripting, analyse de données et automatisation.' },
+                        { nom: 'React', description: 'Création d\'interfaces utilisateur dynamiques et réactives.' }
+                    ],
+                    'Cybersécurité': [
+                        { nom: 'Analyse vulnérabilité', description: 'Identification et tests de pénétration.' },
+                        { nom: 'Cryptographie', description: 'Algorithmes de chiffrement et sécurisation des données.' }
+                    ]
+                },
+                certifications: [
+                    { nom: "CISSP", organisme: "ISC2", annee: 2023 },
+                    { nom: "Ethical Hacker", organisme: "EC-Council", annee: 2022 }
+                ],
+                competenceSelectionnee: null,
+                ouvrirDetails(competence) {
+                    this.competenceSelectionnee = competence;
+                }
+            }
+        }
+    </script>
+    <footer id="footer">
+        <p>© 2024 Mon Portfolio</p>
+    </footer>
+</body>
+</html>

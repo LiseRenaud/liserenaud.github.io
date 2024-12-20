@@ -6,7 +6,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="icon" type="image/png" href="img/favicon.png">
+    <link rel="icon" type="image/png" href="img/logo.png">
 </head>
 <header>
     <nav>
@@ -51,7 +51,9 @@
             <div class="grid md:grid-cols-2 gap-4">
                 <template x-for="certification in certifications">
                     <div class="bg-white border border-gray-200 p-4 rounded-md hover:shadow-sm transition-shadow">
-                        <h4 x-text="certification.nom" class="font-semibold text-blue-700"></h4>
+                        <a :href="certification.lien" target="_blank" rel="noopener noreferrer">
+                            <h4 x-text="certification.nom" class="font-semibold text-blue-700 hover:text-blue-800 underline"></h4>
+                        </a>
                         <p x-text="certification.organisme" class="text-sm text-gray-600"></p>
                         <p class="text-sm text-gray-500">Année : <span x-text="certification.annee"></span></p>
                     </div>
@@ -105,8 +107,8 @@
                     ]
                 },
                 certifications: [
-                    { nom: "CISSP", organisme: "ISC2", annee: 2023 },
-                    { nom: "Ethical Hacker", organisme: "EC-Council", annee: 2022 }
+                    { lien : "https://www.credly.com/badges/a0345596-107d-465c-bc80-d7a209cc130e/linked_in_profile", nom: "CCNA: Introduction to Networks", organisme: "Cisco", annee: 2024 },
+                    { lien: "https://www.credly.com/badges/6f4efa48-dc06-42aa-abf3-799ae31e407c/linked_in_profile", nom: "CCNA: Switching, Routing, and Wireless Essentials", organisme: "Cisco", annee: 2024 }
                 ],
                 competenceSelectionnee: null,
                 ouvrirDetails(competence) {
@@ -116,7 +118,13 @@
         }
     </script>
     <footer id="footer">
-        <p>© 2024 Mon Portfolio</p>
+        <p>© Lise Renaud 2024. Tous droits réservés.</p>
+        <a href="https://www.linkedin.com/in/lise-renaud-cybers%C3%A9curit%C3%A9/" target="_blank">
+            <img src="img/lkdn_logo.jpg" alt="linked_in_profile" style="width: 50px; height: auto;">
+        </a>
+        <a href="mailto:lise.renaud.pro@gmail.com">
+            <img src="img/mail_logo.png" alt="Mail" style="width: 50px; height: auto;">
+        </a>
     </footer>
 </body>
 </html>

@@ -6,7 +6,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="icon" type="image/png" href="img/favicon.png">
+    <link rel="icon" type="image/png" href="img/logo.png">
 </head>
 <header>
     <nav>
@@ -113,7 +113,202 @@
             </div>
         </template>
     </div>
+    <div 
+    x-data="projetsPersonnelsApp()" 
+    class="container mx-auto py-8 px-4"
+>
+    <h2 class="text-3xl font-bold mb-6">Projets Personnels</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <template x-for="projet in projetsData" :key="projet.id">
+            <div 
+                @click="ouvrirProjetDetails(projet)"
+                class="bg-white rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-shadow transform hover:-translate-y-1 duration-200"
+            >
+                <div class="relative h-48 overflow-hidden rounded-t-lg">
+                    <img 
+                        x-show="projet.imageCouverture"
+                        :src="projet.imageCouverture" 
+                        :alt="projet.titre"
+                        class="w-full h-full object-cover"
+                    >
+                    <div 
+                        x-show="!projet.imageCouverture"
+                        class="w-full h-full bg-gradient-to-r from-blue-500 to-purple-500"
+                    ></div>
+                </div>
+                <div class="p-4">
+                    <h3 
+                        x-text="projet.titre" 
+                        class="text-xl font-semibold mb-2"
+                    ></h3>
+                    <p 
+                        x-text="projet.description" 
+                        class="text-gray-600 text-sm mb-3"
+                    ></p>
+                    <div class="flex flex-wrap gap-2">
+                        <template x-for="tech in projet.technologies.slice(0, 3)">
+                            <span 
+                                x-text="tech"
+                                class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded"
+                            ></span>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </div>
 
+    <!-- Modal de détails -->
+    <template x-if="projetSelectionne">
+        <div 
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+            @click.self="projetSelectionne = null"
+        >
+            <div class="bg-white rounded-lg max-w-4xl w-full relative max-h-[90vh] overflow-y-auto">
+                <!-- Image de couverture -->
+                <div class="w-full h-64 overflow-hidden rounded-t-lg">
+                    <img 
+                        x-show="projetSelectionne.imageCouverture"
+                        :src="projetSelectionne.imageCouverture" 
+                        :alt="projetSelectionne.titre"
+                        class="w-full h-full object-cover"
+                    >
+                    <div 
+                        x-show="!projetSelectionne.imageCouverture"
+                        class="w-full h-full bg-gradient-to-r from-blue-500 to-purple-500"
+                    ></div>
+                </div>
+                
+                <!-- Conteneur des détails -->
+                <div class="p-6">
+                    <h2 
+                        x-text="projetSelectionne.titre" 
+                        class="text-3xl font-bold mb-4"
+                    ></h2>
+                    
+                    <!-- Période -->
+                    <p class="text-gray-600 mb-4">
+                        <span x-text="projetSelectionne.periode"></span>
+                    </p>
+                    
+                    <!-- Description détaillée -->
+                    <div class="prose max-w-none mb-6">
+                        <p 
+                            x-text="projetSelectionne.detailsComplets" 
+                            class="text-gray-700 leading-relaxed"
+                        ></p>
+                    </div>
+
+                    <!-- Images du projet -->
+                    <div 
+                        x-show="projetSelectionne.imagesProjet && projetSelectionne.imagesProjet.length"
+                        class="grid grid-cols-2 gap-4 mb-6"
+                    >
+                        <template x-for="image in projetSelectionne.imagesProjet">
+                            <img 
+                                :src="image.url" 
+                                :alt="image.description"
+                                class="rounded-lg shadow-md"
+                            >
+                        </template>
+                    </div>
+
+                    <!-- Technologies -->
+                    <div class="mb-6">
+                        <h4 class="text-xl font-semibold mb-3">Technologies utilisées</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <template x-for="tech in projetSelectionne.technologies">
+                                <span 
+                                    x-text="tech"
+                                    class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full"
+                                ></span>
+                            </template>
+                        </div>
+                    </div>
+                    
+                    <!-- Liens -->
+                    <div class="flex flex-wrap gap-4 mb-6">
+                        <template x-if="projetSelectionne.lienGithub">
+                            <a 
+                                :href="projetSelectionne.lienGithub"
+                                target="_blank"
+                                class="flex items-center bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 transition"
+                            >
+                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12"/>
+                                </svg>
+                                GitHub
+                            </a>
+                        </template>
+                        <template x-if="projetSelectionne.lienDemo">
+                            <a 
+                                :href="projetSelectionne.lienDemo"
+                                target="_blank"
+                                class="flex items-center bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd" />
+                                </svg>
+                                Démo en ligne
+                            </a>
+                        </template>
+                    </div>
+                    
+                    <!-- Bouton fermer -->
+                    <button 
+                        @click="projetSelectionne = null"
+                        class="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+                    >
+                        Fermer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </template>
+</div>
+
+    <script>
+        function projetsPersonnelsApp() {
+            return {
+                projetsData: [
+                    {
+                        id: 1,
+                        titre: "Portfolio Personnel",
+                        description: "Mon site portfolio avec mes projets et compétences",
+                        imageCouverture: "/img/portfolio-1.png",
+                        periode: "Janvier - Mars 2024",
+                        detailsComplets: "Développement complet de mon portfolio personnel utilisant les dernières technologies web. Le site présente mes projets, compétences et expériences de manière interactive et responsive.",
+                        technologies: ["React", "Tailwind CSS", "Next.js", "Framer Motion"],
+                        imagesProjet: [
+                            {
+                                url: "/img/portfolio-1.png",
+                                description: "Page d'accueil"
+                            },
+                            {
+                                url: "/images/portfolio-2.jpg",
+                                description: "Section projets"
+                            }
+                        ],
+                        lienGithub: "https://github.com/username/portfolio",
+                        lienDemo: "https://portfolio.username.dev"
+                    },
+                    {
+                        id: 3,
+                        titre: "Bot Discord Musique",
+                        description: "Bot Discord pour écouter de la musique en groupe",
+                        periode: "Juin - Août 2023",
+                        detailsComplets: "Développement d'un bot Discord permettant aux utilisateurs d'écouter de la musique en groupe avec des fonctionnalités de playlist, votes et effets audio.",
+                        technologies: ["Node.js", "Discord.js", "FFmpeg", "MongoDB"],
+                        lienGithub: "https://github.com/username/discord-music-bot"
+                    }
+                ],
+                projetSelectionne: null,
+                ouvrirProjetDetails(projet) {
+                    this.projetSelectionne = projet;
+                }
+            }
+        }
+    </script>
     <script>
         function projetsApp() {
             return {
@@ -151,7 +346,13 @@
         }
     </script>
     <footer id="footer">
-        <p>© 2024 Mon Portfolio</p>
+        <p>© Lise Renaud 2024. Tous droits réservés.</p>
+        <a href="https://www.linkedin.com/in/lise-renaud-cybers%C3%A9curit%C3%A9/" target="_blank">
+            <img src="img/lkdn_logo.jpg" alt="linked_in_profile" style="width: 50px; height: auto;">
+        </a>
+        <a href="mailto:lise.renaud.pro@gmail.com">
+            <img src="img/mail_logo.png" alt="Mail" style="width: 50px; height: auto;">
+        </a>
     </footer>
 </body>
 </html>

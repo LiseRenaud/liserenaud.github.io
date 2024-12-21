@@ -365,6 +365,9 @@ nav {
 #footer {
     margin-top: auto;
 }
+.prenom{
+    font-size: 8em;
+}
 
         /* Style pour le footer */
         footer {
@@ -377,6 +380,10 @@ nav {
         footer p {
             font-size: 1.1em; /* Augmenté */
             margin-bottom: 10px;
+        }
+
+        .menu-toggle {
+            font-size: 3rem;
         }
 
         @media (max-width: 768px) {
@@ -393,3 +400,109 @@ nav {
                 border-bottom: 1px solid #eee;
             }
         }
+        @media (max-width: 768px) {
+            header {
+                padding: 10px;
+            }
+        
+            .menu {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                right: 20px;
+                background-color: white;
+                width: 200px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                padding: 10px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+        
+            .menu li {
+                margin: 10px 0;
+            }
+        
+            .menu.active {
+                display: flex;
+            }
+        
+            .menu-toggle {
+                display: block;
+            }
+        }
+        
+        /* Adjust Font Sizes */
+        @media (max-width: 768px) {
+            body {
+                font-size: 14px;
+            }
+        
+            h1 {
+                font-size: 2.5rem; /* Augmenté pour rester visible sur mobiles */
+            }
+        
+            h2 {
+                font-size: 1.5rem;
+            }
+        
+            p {
+                font-size: 0.9rem;
+            }
+        
+            .btn-cv {
+                font-size: 0.8rem;
+            }
+        
+            footer {
+                font-size: 0.8rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                font-size: 12px;
+            }
+        
+            h1 {
+                font-size: 2rem; /* Réduit légèrement sur les très petits écrans */
+            }
+        
+            h2 {
+                font-size: 1.2rem;
+            }
+        
+            p {
+                font-size: 0.8rem;
+            }
+        
+            .btn-cv {
+                font-size: 0.7rem;
+            }
+        
+            footer {
+                font-size: 0.7rem;
+            }
+        }
+
+        /* Style pour l'image de profil */
+.photo-ronde {
+    width: 100%; /* L'image occupe toute la largeur de son conteneur */
+    max-width: 300px; /* Limite la taille maximale de l'image pour ne pas trop l'agrandir */
+    height: auto; /* Conserve les proportions de l'image */
+    border-radius: 50%; /* Rend l'image ronde */
+    display: block; /* Empêche les espaces sous l'image */
+    margin: 0 auto; /* Centre l'image horizontalement */
+}
+
+/* Ajoutez des styles pour rendre l'image encore plus responsive pour les petits écrans */
+@media (max-width: 768px) {
+    .photo-ronde {
+        max-width: 200px; /* Réduit la taille de l'image sur les tablettes et téléphones */
+    }
+    .prenom {
+        font-size: 2em;
+    }
+}
+
+        

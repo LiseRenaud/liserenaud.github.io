@@ -212,7 +212,13 @@
             <img src="img/mail_logo.png" alt="Mail" style="width: 50px; height: auto;">
         </a>
     </footer>
-
+    <script>const menuToggle = document.querySelector('.menu-toggle');
+        const menu = document.querySelector('.menu');
+        
+        // Ajout d'un événement pour ouvrir/fermer le menu
+        menuToggle.addEventListener('click', () => {
+            menu.classList.toggle('active');
+        });</script>
     <script>
         function toggleDetails(element) {
             const details = element.querySelector('.details');

@@ -87,28 +87,43 @@
         function competencesApp() {
             return {
                 competencesParCategorie: {
-                    'Réseaux': [
-                        { nom: 'TCP/IP', description: 'Maîtrise des protocoles fondamentaux de communication réseau.' },
-                        { nom: 'Routage', description: 'Configuration de routeurs et gestion des tables de routage.' },
-                        { nom: 'Pare-feu', description: 'Administration de pare-feu et règles de sécurité réseau.' }
+                    "Réseaux": [
+                        { "nom": "TCP/IP", "description": "Maîtrise des protocoles fondamentaux de communication réseau." },
+                        { "nom": "LAN/WAN", "description": "Gestion efficace des réseaux locaux et étendus, avec optimisation de la connectivité." },
+                        { "nom": "Routage et commutation", "description": "Compétence en configuration et gestion des routeurs et commutateurs pour assurer une connectivité fiable." },
+                        { "nom": "QoS", "description": "Expertise dans la gestion de la qualité de service pour les applications sensibles à la latence." },
+                        { "nom": "Wi-Fi", "description": "Configuration et optimisation des réseaux sans fil pour une couverture et une sécurité maximales." },
+                        { "nom": "VPN", "description": "Configuration et gestion des réseaux privés virtuels pour garantir la sécurité des communications à travers des réseaux publics." },
+                        { "nom": "Routage dynamique (OSPF)", "description": "Configuration et dépannage des protocoles de routage dynamique pour une connectivité fiable." },
+                        { "nom": "SSH", "description": "Implémentation d'accès distants sécurisés aux systèmes d'information." },
+                        { "nom": "Projet réseau multisite", "description": "Conception et déploiement de solutions multisites avec interconnexion sécurisée." },
+                        { "nom": "Transmission optique (DWDM)", "description": "Gestion des infrastructures de fibre optique à haut débit pour les télécommunications." }
                     ],
-                    'Télécommunication': [
-                        { nom: '5G', description: 'Architectures réseau 5G et technologies de communication mobile.' },
-                        { nom: 'Protocoles', description: 'Implémentation de protocoles HTTP, MQTT, SIP.' }
+                    "Programmation": [
+                        { "nom": "Analyse de données", "description": "Utilisation de langages comme Python pour collecter et analyser les données." },
+                        { "nom": "Python", "description": "Scripting, analyse de données et automatisation." },
+                        { "nom": "HTML & CSS", "description": "Création de structures web interactives et de styles visuellement attrayants pour des sites web." },
+                        { "nom": "Bash", "description": "Utilisation de Bash pour l’administration et la gestion efficace des systèmes Linux/Unix." },
+                        { "nom": "SQL", "description": "Maîtrise des bases de données relationnelles, incluant la conception, la gestion et les requêtes optimisées." },
+                        { "nom": "PHP", "description": "Développement d’applications web dynamiques et sécurisées côté serveur." }
                     ],
-                    'Programmation': [
-                        { nom: 'JavaScript', description: 'Développement web full-stack avec frameworks modernes.' },
-                        { nom: 'Python', description: 'Scripting, analyse de données et automatisation.' },
-                        { nom: 'React', description: 'Création d\'interfaces utilisateur dynamiques et réactives.' }
+                    "Cybersécurité": [
+                        { "nom": "Analyse vulnérabilité", "description": "Identification et tests de pénétration." },
+                        { "nom": "Cryptographie", "description": "Algorithmes de chiffrement et sécurisation des données." },
+                        { "nom": "Active Directory", "description": "Sécurisation et administration des environnements Active Directory." }
                     ],
-                    'Cybersécurité': [
-                        { nom: 'Analyse vulnérabilité', description: 'Identification et tests de pénétration.' },
-                        { nom: 'Cryptographie', description: 'Algorithmes de chiffrement et sécurisation des données.' }
+                    "Télécommunication": [
+                        { "nom": "5G", "description": "Architectures réseau 5G et technologies de communication mobile." },
+                        { "nom": "Protocoles", "description": "Implémentation de protocoles HTTP, MQTT, SIP." },
+                        { "nom": "Communication VoIP", "description": "Déploiement de systèmes de communication d’entreprise basés sur la VoIP." }
                     ]
                 },
+
                 certifications: [
                     { lien : "https://www.credly.com/badges/a0345596-107d-465c-bc80-d7a209cc130e/linked_in_profile", nom: "CCNA: Introduction to Networks", organisme: "Cisco", annee: 2024 },
-                    { lien: "https://www.credly.com/badges/6f4efa48-dc06-42aa-abf3-799ae31e407c/linked_in_profile", nom: "CCNA: Switching, Routing, and Wireless Essentials", organisme: "Cisco", annee: 2024 }
+                    { lien: "https://www.credly.com/badges/6f4efa48-dc06-42aa-abf3-799ae31e407c/linked_in_profile", nom: "CCNA: Switching, Routing, and Wireless Essentials", organisme: "Cisco", annee: 2024 },
+                    { lien: "https://openbadgefactory.com/v1/assertion/57df5b5f3bbfb24ebceb7e1ddd8d29ac0633080e.html", nom: "CybeR&T - LAN et Services", organisme: "ACD R&T", annee: 2024 },
+                    { lien: "https://openbadgefactory.com/v1/assertion/ec3d901ad0b0ae5eb93ed85e6be761b29d9b8a4d.html", nom: "CybeR&T - Hygiène Informatique", organisme: "ACD R&T", annee: 2023 }
                 ],
                 competenceSelectionnee: null,
                 ouvrirDetails(competence) {
@@ -117,6 +132,13 @@
             }
         }
     </script>
+    <script>const menuToggle = document.querySelector('.menu-toggle');
+        const menu = document.querySelector('.menu');
+        
+        // Ajout d'un événement pour ouvrir/fermer le menu
+        menuToggle.addEventListener('click', () => {
+            menu.classList.toggle('active');
+        });</script>
     <footer id="footer">
         <p>© Lise Renaud 2024. Tous droits réservés.</p>
         <a href="https://www.linkedin.com/in/lise-renaud-cybers%C3%A9curit%C3%A9/" target="_blank">

@@ -365,3 +365,31 @@ nav {
 #footer {
     margin-top: auto;
 }
+
+        /* Style pour le footer */
+        footer {
+            background-color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        }
+
+        footer p {
+            font-size: 1.1em; /* Augmenté */
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .split {
+                min-height: auto;
+            }
+            
+            .left {
+                border-right: none;
+                border-bottom: 1px solid #eee;
+            }
+        }

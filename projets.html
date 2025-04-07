@@ -72,6 +72,7 @@
         </div>
 
         <!-- Modal de détails projets académiques -->
+                <!-- Modal de détails projets académiques -->
         <template x-if="projetSelectionne">
             <div 
                 class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
@@ -99,21 +100,95 @@
                             class="text-3xl font-bold mb-4"
                         ></h2>
                         
-                        <!-- Description détaillée -->
+                        <!-- Rendu des sections de contenu -->
                         <div class="prose max-w-none mb-6">
-                            <p 
-                                x-text="projetSelectionne.details" 
-                                class="text-gray-700 leading-relaxed"
-                            ></p>
+                            <template x-if="projetSelectionne.contenuDetaille">
+                                <div>
+                                    <template x-for="(section, index) in projetSelectionne.contenuDetaille" :key="index">
+                                        <div class="mb-6">
+                                            <!-- Titre de section (si présent) -->
+                                            <template x-if="section.titre">
+                                                <h3 x-text="section.titre" class="text-xl font-semibold mb-3"></h3>
+                                            </template>
+                                            
+                                            <!-- Contenu texte -->
+                                            <template x-if="section.texte">
+                                                <div x-html="section.texte" class="text-gray-700 leading-relaxed mb-4"></div>
+                                            </template>
+                                            
+                                            <!-- Image (si présente) -->
+                                            <template x-if="section.image">
+                                                <div class="my-4">
+                                                    <img 
+                                                        :src="section.image.url" 
+                                                        :alt="section.image.alt || 'Image du projet'"
+                                                        class="w-full rounded-lg shadow-md"
+                                                    >
+                                                    <template x-if="section.image.legende">
+                                                        <p x-text="section.image.legende" class="text-sm text-gray-500 text-center mt-2"></p>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                            
+                                            <!-- Vidéo (si présente) -->
+                                            <template x-if="section.video">
+                                                <div class="my-4">
+                                                    <div class="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden">
+                                                        <iframe 
+                                                            :src="section.video.url" 
+                                                            frameborder="0" 
+                                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                                            allowfullscreen
+                                                            class="w-full h-full"
+                                                        ></iframe>
+                                                    </div>
+                                                    <template x-if="section.video.legende">
+                                                        <p x-text="section.video.legende" class="text-sm text-gray-500 text-center mt-2"></p>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                            
+                                            <!-- Galerie d'images (si présente) -->
+                                            <template x-if="section.galerie && section.galerie.length">
+                                                <div class="my-4">
+                                                    <div class="grid grid-cols-2 gap-4">
+                                                        <template x-for="(image, imgIndex) in section.galerie" :key="imgIndex">
+                                                            <div>
+                                                                <img 
+                                                                    :src="image.url" 
+                                                                    :alt="image.alt || 'Image du projet'"
+                                                                    class="w-full rounded-lg shadow-md"
+                                                                >
+                                                                <template x-if="image.legende">
+                                                                    <p x-text="image.legende" class="text-sm text-gray-500 text-center mt-2"></p>
+                                                                </template>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+                            
+                            <!-- Affichage du contenu simple (pour rétrocompatibilité) -->
+                            <template x-if="!projetSelectionne.contenuDetaille && projetSelectionne.details">
+                                <p 
+                                    x-text="projetSelectionne.details" 
+                                    class="text-gray-700 leading-relaxed"
+                                ></p>
+                            </template>
                         </div>
 
-                        <!-- Image intérieure -->
-                        <img 
-                            x-show="projetSelectionne.image_int"
-                            :src="projetSelectionne.image_int" 
-                            :alt="projetSelectionne.titre"
-                            class="w-full max-h-[500px] object-contain rounded-lg mb-6"
-                        >
+                        <!-- Image intérieure (pour rétrocompatibilité) -->
+                        <template x-if="!projetSelectionne.contenuDetaille && projetSelectionne.image_int">
+                            <img 
+                                :src="projetSelectionne.image_int" 
+                                :alt="projetSelectionne.titre"
+                                class="w-full max-h-[500px] object-contain rounded-lg mb-6"
+                            >
+                        </template>
 
                         <!-- Technologies -->
                         <div class="mb-6">
@@ -153,6 +228,7 @@
                 </div>
             </div>
         </template>
+
     </div>
 
     <!-- Section 2: Projets Personnels -->
@@ -202,6 +278,7 @@
         </div>
 
         <!-- Modal de détails projets personnels -->
+        <!-- Modal de détails projets personnels -->
         <template x-if="projetSelectionne">
             <div 
                 class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
@@ -234,27 +311,99 @@
                             <span x-text="projetSelectionne.periode"></span>
                         </p>
                         
-                        <!-- Description détaillée -->
+                        <!-- Rendu des sections de contenu -->
                         <div class="prose max-w-none mb-6">
-                            <p 
-                                x-text="projetSelectionne.detailsComplets" 
-                                class="text-gray-700 leading-relaxed"
-                            ></p>
-                        </div>
-
-                        <!-- Images du projet -->
-                        <div 
-                            x-show="projetSelectionne.imagesProjet && projetSelectionne.imagesProjet.length"
-                            class="grid grid-cols-2 gap-4 mb-6"
-                        >
-                            <template x-for="image in projetSelectionne.imagesProjet">
-                                <img 
-                                    :src="image.url" 
-                                    :alt="image.description"
-                                    class="rounded-lg shadow-md"
-                                >
+                            <template x-if="projetSelectionne.contenuDetaille">
+                                <div>
+                                    <template x-for="(section, index) in projetSelectionne.contenuDetaille" :key="index">
+                                        <div class="mb-6">
+                                            <!-- Titre de section (si présent) -->
+                                            <template x-if="section.titre">
+                                                <h3 x-text="section.titre" class="text-xl font-semibold mb-3"></h3>
+                                            </template>
+                                            
+                                            <!-- Contenu texte -->
+                                            <template x-if="section.texte">
+                                                <div x-html="section.texte" class="text-gray-700 leading-relaxed mb-4"></div>
+                                            </template>
+                                            
+                                            <!-- Image (si présente) -->
+                                            <template x-if="section.image">
+                                                <div class="my-4">
+                                                    <img 
+                                                        :src="section.image.url" 
+                                                        :alt="section.image.alt || 'Image du projet'"
+                                                        class="w-full rounded-lg shadow-md"
+                                                    >
+                                                    <template x-if="section.image.legende">
+                                                        <p x-text="section.image.legende" class="text-sm text-gray-500 text-center mt-2"></p>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                            
+                                            <!-- Vidéo (si présente) -->
+                                            <template x-if="section.video">
+                                                <div class="my-4">
+                                                    <div class="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden">
+                                                        <iframe 
+                                                            :src="section.video.url" 
+                                                            frameborder="0" 
+                                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                                            allowfullscreen
+                                                            class="w-full h-full"
+                                                        ></iframe>
+                                                    </div>
+                                                    <template x-if="section.video.legende">
+                                                        <p x-text="section.video.legende" class="text-sm text-gray-500 text-center mt-2"></p>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                            
+                                            <!-- Galerie d'images (si présente) -->
+                                            <template x-if="section.galerie && section.galerie.length">
+                                                <div class="my-4">
+                                                    <div class="grid grid-cols-2 gap-4">
+                                                        <template x-for="(image, imgIndex) in section.galerie" :key="imgIndex">
+                                                            <div>
+                                                                <img 
+                                                                    :src="image.url" 
+                                                                    :alt="image.alt || 'Image du projet'"
+                                                                    class="w-full rounded-lg shadow-md"
+                                                                >
+                                                                <template x-if="image.legende">
+                                                                    <p x-text="image.legende" class="text-sm text-gray-500 text-center mt-2"></p>
+                                                                </template>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+                            
+                            <!-- Affichage du contenu simple (pour rétrocompatibilité) -->
+                            <template x-if="!projetSelectionne.contenuDetaille && projetSelectionne.detailsComplets">
+                                <p 
+                                    x-text="projetSelectionne.detailsComplets" 
+                                    class="text-gray-700 leading-relaxed"
+                                ></p>
                             </template>
                         </div>
+
+                        <!-- Images du projet (pour rétrocompatibilité) -->
+                        <template x-if="!projetSelectionne.contenuDetaille && projetSelectionne.imagesProjet && projetSelectionne.imagesProjet.length">
+                            <div class="grid grid-cols-2 gap-4 mb-6">
+                                <template x-for="image in projetSelectionne.imagesProjet">
+                                    <img 
+                                        :src="image.url" 
+                                        :alt="image.description"
+                                        class="rounded-lg shadow-md"
+                                    >
+                                </template>
+                            </div>
+                        </template>
 
                         <!-- Technologies -->
                         <div class="mb-6">
@@ -289,7 +438,7 @@
                                     target="_blank"
                                     class="flex items-center bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
                                 >
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 h-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd" />
                                     </svg>
                                     Démo en ligne
@@ -309,6 +458,7 @@
             </div>
         </template>
     </div>
+    <!-- Structure de données pour un projet académique -->
 
     <script>
         function projetsAcademiquesApp() {
@@ -319,22 +469,204 @@
                         titre: "Traiter des Données",
                         description: "Analyse des données du Compte général de l'État",
                         image: "img/Sae105.PNG",
-                        image_int: "img/resultat_donnees.png",
-                        details: "La SAE 1.05 avait pour objectif de nous initier au traitement de données en Python, depuis leur récupération jusqu'à leur analyse et visualisation. En binôme, nous avons choisi d'étudier les données du Compte général de l'État (2012-2022) issues de data.gouv.fr, malgré un taux élevé de données incomplètes (70%). Nous avons structuré ces informations en JSON à partir de fichiers CSV pour en faciliter l'exploitation. Le projet s'est organisé autour de la création de graphiques à l'aide d'une CLI et d'un GUI, avec un système de gestion de versions sur GitHub pour collaborer efficacement. Les principales difficultés ont concerné la fiabilité des données, la gestion des versions du code et la manipulation des classes dans les interfaces graphiques. Malgré ces défis, nous avons approfondi nos connaissances sur les bibliothèques Python (matplotlib, tkinter), le traitement des fichiers JSON, et la gestion de projet en respectant les délais. À l'avenir, nous souhaitons enrichir ce projet avec de nouvelles fonctionnalités et envisager son extension à l'échelle nationale pour une meilleure compréhension de la répartition budgétaire publique et de sa transparence.",
                         technologies: ["SQL", "Python", "JSON", "GitHub"],
-                        pdf: "pdf/Portfolio_SAE1.05.pdf"
+                        pdf: "pdf/Portfolio_SAE1.05.pdf",
+                        
+                        // Nouvelle structure pour un contenu détaillé et riche
+                        contenuDetaille: [
+                            {
+                                titre: "Contexte du projet",
+                                texte: "La SAE 1.05 avait pour objectif de nous initier au traitement de données en Python, depuis leur récupération jusqu'à leur analyse et visualisation."
+                            },
+                            {
+                                titre: "Méthodologie",
+                                texte: "En binôme, nous avons choisi d'étudier les données du Compte général de l'État (2012-2022) issues de data.gouv.fr, malgré un taux élevé de données incomplètes (70%). Nous avons structuré ces informations en JSON à partir de fichiers CSV pour en faciliter l'exploitation.",
+                            },
+                            {
+                                titre: "Développement du projet",
+                                texte: "Le projet s'est organisé autour de la création de graphiques à l'aide d'une CLI et d'un GUI, avec un système de gestion de versions sur GitHub pour collaborer efficacement.",
+                                galerie: [
+                                    {
+                                        url: "img/cli_interface.jpg",
+                                        alt: "Interface en ligne de commande",
+                                        legende: "Interface CLI développée"
+                                    },
+                                    {
+                                        url: "img/gui_interface.jpg",
+                                        alt: "Interface graphique utilisateur",
+                                        legende: "Interface GUI développée"
+                                    }
+                                ]
+                            },
+                            {
+                                titre: "Résultats obtenus",
+                                texte: "Nous avons réussi à produire plusieurs visualisations pertinentes malgré la qualité médiocre des données initiales.",
+                                image: {
+                                    url: "img/resultat_donnees.png",
+                                    alt: "Visualisation des résultats",
+                                    legende: "Exemple de visualisation des données budgétaires"
+                                }
+                            },
+                            {
+                                titre: "Démonstration vidéo",
+                                video: {
+                                    url: "https://www.youtube.com/embed/EXAMPLE_ID",
+                                    legende: "Démonstration du fonctionnement de notre application"
+                                }
+                            },
+                            {
+                                titre: "Difficultés et apprentissages",
+                                texte: "Les principales difficultés ont concerné la fiabilité des données, la gestion des versions du code et la manipulation des classes dans les interfaces graphiques. Malgré ces défis, nous avons approfondi nos connaissances sur les bibliothèques Python (matplotlib, tkinter), le traitement des fichiers JSON, et la gestion de projet en respectant les délais."
+                            },
+                            {
+                                titre: "Perspectives",
+                                texte: "À l'avenir, nous souhaitons enrichir ce projet avec de nouvelles fonctionnalités et envisager son extension à l'échelle nationale pour une meilleure compréhension de la répartition budgétaire publique et de sa transparence."
+                            }
+                        ]
                     },
                     {
                         id: 2,
                         titre: "Concevoir un réseau informatique sécurisé multi-sites",
                         description: "Concevoir un réseau informatique sécurisé multi-sites",
                         image: "img/SAE303.jpg",
-                        image_int: "img/topologie_SAE303.png",
-                        details: "L'objectif principal de la SAÉ 3.ROM.03 était de concevoir et d'administrer un réseau multimédia adapté aux besoins spécifiques d'une entreprise multi-sites. Cet apprentissage visait à renforcer mes compétences techniques en intégrant des technologies avancées comme la QoS, les VPN IPsec, et la téléphonie IP tout en respectant les contraintes d'un environnement professionnel.",
                         technologies: ["QoS", "VPNIPsec", "VoIP", "OSPF"],
-                        pdf: "pdf/Portfolio_Lise_Renaud_SAE303 (1).pdf"
+                        pdf: "pdf/Portfolio_Lise_Renaud_SAE303 (1).pdf",
+                        contenuDetaille: [
+                            {
+                                titre: "Objectif du projet",
+                                texte: "L'objectif principal de la SAÉ 3.ROM.03 était de concevoir et d'administrer un réseau multimédia adapté aux besoins spécifiques d'une entreprise multi-sites."
+                            },
+                            {
+                                titre: "Compétences développées",
+                                texte: "Cet apprentissage visait à renforcer mes compétences techniques en intégrant des technologies avancées comme la QoS, les VPN IPsec, et la téléphonie IP tout en respectant les contraintes d'un environnement professionnel."
+                            },
+                            {
+                                titre: "Topologie du réseau",
+                                image: {
+                                    url: "img/topologie_SAE303.png",
+                                    alt: "Topologie du réseau multi-sites",
+                                    legende: "Schéma de la topologie réseau implémentée"
+                                }
+                            }
+                        ]
                     },
-                    // Vous pouvez ajouter d'autres projets académiques ici
+                    {
+                        id: 3,
+                        titre: "Mettre en œuvre un système de transmission",
+                        description: "Déploiement et caractérisation d’un système de transmission en contexte professionnel.",
+                        image: "img/SAE301.jpg",
+                        technologies: ["GNSS", "Géodésie", "Google Maps", "Transmission multi-mode"],
+                        pdf: "pdf/Portfolio_SAE301.pdf",
+                        contenuDetaille: [
+                            {
+                                titre: "Objectif du projet",
+                                texte: "L'objectif de la SAÉ 3.01 était de répondre à un cahier des charges pour concevoir et mettre en œuvre un système de transmission entre différents sites, en tenant compte des contraintes techniques d'un opérateur ou d'une entreprise."
+                            },
+                            {
+                                titre: "Compétences développées",
+                                texte: "Cette SAÉ m’a permis de mobiliser des compétences telles que le déploiement et la caractérisation de systèmes complexes, l’étude de solutions multi-sites, et la mise en œuvre d’outils d’analyse et de mesure des performances.",
+                                galerie: [
+                                    {
+                                        url: "img/capturemesuregnss.png",
+                                        alt: "Visualisation des résultats",
+                                        legende: "Exemple de visualisation d'une mesure '"
+                                    },
+                                    {
+                                        url: "img/capturemesure2.png",
+                                        alt: "Visualisation des résultats",
+                                        legende: "Exemple de visualisation d'une mesure '"
+                                    }
+                                ]
+                            },
+                            {
+                                titre: "Difficultés rencontrées",
+                                texte: "Nous avons rencontré des difficultés pour vérifier la précision de notre système. Pour cela, nous avons dû intégrer et tester plusieurs modes de transmission, notamment le GNSS."
+                            },
+                            {
+                                titre: "Axes d’amélioration",
+                                texte: "Nous aurions pu approfondir l’aspect géodésique, intégrer une carte adaptée au logiciel utilisé et réussir l'intégration avec Google Maps pour visualiser les trajets et les analyser plus précisément."
+                            }
+                        ]
+                    },
+                    {
+                        id: 302,
+                        titre: "Développer des applications utilisant des graphes",
+                        description: "Conception d’une application client/serveur de gestion de données basée sur les graphes.",
+                        image: "img/sae3.02.gif",
+                        technologies: ["python", "tkinter", "Graphes", "matplotlib"],
+                        pdf: "pdf/Portfolio_SAE302.pdf",
+                        contenuDetaille: [
+                            {
+                                titre: "Objectif du projet",
+                                texte: "À partir d’un cahier des charges, le but de cette SAÉ était de développer une application communicante basée sur les graphes, avec échange de données, authentification et sauvegarde sécurisée."
+                            },
+                            {
+                                titre: "Compétences développées",
+                                texte: "Cette SAÉ m’a permis de renforcer mes compétences en développement client/serveur, en gestion de données, en protocoles réseaux et en conception d'interfaces utilisateur adaptées à un contexte métier."
+                            },
+                            {
+                                titre: "Difficultés rencontrées",
+                                texte: "Certaines parties du développement, comme l’implémentation des sockets ou la sérialisation des données, ont nécessité un travail de recherche et de collaboration pour assurer un fonctionnement fluide."
+                            },
+                            {
+                                titre: "Axes d’amélioration",
+                                texte: "Nous aurions pu optimiser l’interface utilisateur, améliorer la documentation technique, et proposer des visualisations plus dynamiques des graphes utilisés."
+                            }
+                        ]
+                    },
+                    {
+                        id: 304,
+                        titre: "Découvrir le pentesting",
+                        description: "Initiation à l’audit de sécurité d’un système d’information via des techniques de pentesting éthique.",
+                        image: "img/sae304.jpg",
+                        technologies: ["Pentesting", "Metasploit", "Reconnaissance"],
+                        pdf: "pdf/Portfolio_SAE304.pdf",
+                        contenuDetaille: [
+                            {
+                                titre: "Objectif du projet",
+                                texte: "Cette SAÉ avait pour but de découvrir les méthodes d’analyse et de test d’un système d’information dans un cadre éthique, en suivant les étapes d’un test de pénétration, depuis la phase de reconnaissance jusqu’à la simulation d’attaques contrôlées."
+                            },
+                            {
+                                titre: "Compétences développées",
+                                texte: "J’ai pu acquérir des compétences dans la reconnaissance réseau, l’identification de vulnérabilités, et l’utilisation d’outils comme Metasploit ou Shodan dans le respect des règles éthiques et juridiques."
+                            },
+                            {
+                                titre: "Difficultés rencontrées",
+                                texte: "La principale difficulté rencontrée fut l’organisation avec le binôme, qui a parfois ralenti l’avancement du projet. Une meilleure gestion du temps et des tâches aurait été bénéfique."
+                            },
+                            {
+                                titre: "Axes d’amélioration",
+                                texte: "Mieux répartir les rôles et adopter une méthode de gestion de projet plus structurée (comme Scrum ou Kanban) aurait permis une meilleure efficacité et une communication plus fluide au sein du binôme."
+                            }
+                        ]
+                    },
+                    {
+                        id: 401,
+                        titre: "Sécurisation d'un système d'information",
+                        description: "Mise en œuvre des outils et bonnes pratiques pour sécuriser un système d'information multi-sites.",
+                        image: "img/SAE401.png",
+                        technologies: ["Firewall", "Bastion", "AD", "Snort", "port mirroring"],
+                        pdf: "pdf/Portfolio_SAE401.pdf",
+                        contenuDetaille: [
+                            {
+                                titre: "Objectif du projet",
+                                texte: "Ce projet avait pour objectif de renforcer la sécurité d’un système d'information déjà conçu, en appliquant les recommandations de l’ANSSI et en mettant en œuvre des solutions de sécurité au niveau des équipements réseau et des services."
+                            },
+                            {
+                                titre: "Compétences développées",
+                                texte: "J’ai appris à sécuriser des infrastructures réseau, à mettre en place des services protégés, à choisir et utiliser des outils cryptographiques adaptés, et à administrer les défenses contre les menaces connues."
+                            },
+                            {
+                                titre: "Difficultés rencontrées",
+                                texte: "Certaines étapes de configuration des services sécurisés ont demandé des recherches approfondies et une bonne coordination pour éviter les conflits réseau et les interruptions de services."
+                            },
+                            {
+                                titre: "Axes d’amélioration",
+                                texte: "Pour aller plus loin, il aurait été utile de documenter plus rigoureusement chaque étape de sécurisation et d’automatiser certains processus de vérification (audit, scan, alertes)."
+                            }
+                        ]
+                    },
+                    // Vous pouvez ajouter d'autres projets académiques ici avec la nouvelle structure
                 ],
                 projetSelectionne: null,
                 ouvrirProjetDetails(projet) {
@@ -352,19 +684,36 @@
                         description: "Mon site portfolio avec mes projets et compétences",
                         imageCouverture: "img/portfolio-1.png",
                         periode: "Janvier - Mars 2024",
-                        detailsComplets: "Développement complet de mon portfolio personnel utilisant les dernières technologies web. Le site présente mes projets, compétences et expériences de manière interactive et responsive.",
                         technologies: ["HTML", "CSS", "JavaScript"],
-                        imagesProjet: [
+                        lienGithub: "https://liserenaud.github.io",
+                        
+                        // Nouvelle structure pour un contenu détaillé et riche
+                        contenuDetaille: [
                             {
-                                url: "img/portfolio-1.png",
-                                description: "Page d'accueil"
+                                titre: "Présentation du projet",
+                                texte: "Développement complet de mon portfolio personnel utilisant les dernières technologies web. Le site présente mes projets, compétences et expériences de manière interactive et responsive."
                             },
                             {
-                                url: "img/portfolio-2.png",
-                                description: "Section projets"
+                                titre: "Interface utilisateur",
+                                texte: "L'interface a été conçue pour être à la fois élégante et intuitive, permettant une navigation fluide entre les différentes sections.",
+                                galerie: [
+                                    {
+                                        url: "img/portfolio-1.png",
+                                        alt: "Page d'accueil",
+                                        legende: "Vue de la page d'accueil du portfolio"
+                                    },
+                                    {
+                                        url: "img/portfolio-2.png",
+                                        alt: "Section projets",
+                                        legende: "Vue de la section des projets"
+                                    }
+                                ]
+                            },
+                            {
+                                titre: "Fonctionnalités implémentées",
+                                texte: "Le site comprend plusieurs fonctionnalités avancées comme l'affichage modal des projets, la navigation fluide entre les sections, et un design responsive adapté à tous les appareils."
                             }
-                        ],
-                        lienGithub: "https://liserenaud.github.io"
+                        ]
                     },
                     {
                         id: 2,
@@ -372,19 +721,41 @@
                         description: "Création d'une vidéo présentant la formation du BUT Réseaux et Télécommunication",
                         imageCouverture: "img/JFMF_8.jpg",
                         periode: "Novembre - Février 2024",
-                        detailsComplets: "Nous avons participé au concours national Je filme ma formation en tant qu étudiants de l'IUT de La Rochelle, avec notre équipe composée de Louka, Ewen, Lise, Aymeric et Paul. Ensemble, nous avons créé une vidéo pédagogique pour présenter notre formation Réseaux & Télécommunications. Ce concours, organisé par le Ministère de l'Éducation Nationale, représente une belle opportunité de mettre en avant notre département et ses débouchés. Nous sommes fiers d'annoncer que notre vidéo a été récompensée par un trophée bronze ! Cette distinction témoigne de notre engagement et du travail fourni pour valoriser notre formation.",
                         technologies: ["Écriture de script", "Storytelling", "Créativité", "Adaptabilité", "Communication"],
-                        imagesProjet: [
+                        lienDemo: "https://www.parcoursmetiers.tv/video/16207-la-rochelle-en-reseau",
+                        
+                        contenuDetaille: [
                             {
-                                url: "img/recto_JFMF.png",
-                                description: "Fascicule de promotion recto"
+                                titre: "Le projet et son contexte",
+                                texte: "Nous avons participé au concours national Je filme ma formation en tant qu'étudiants de l'IUT de La Rochelle, avec notre équipe composée de Louka, Ewen, Lise, Aymeric et Paul."
                             },
                             {
-                                url: "img/concours-je-filme-ma-formation-photo.jpg",
-                                description: "Photo au grand rex lors de la diffusion"
+                                titre: "Objectifs et réalisation",
+                                texte: "Ensemble, nous avons créé une vidéo pédagogique pour présenter notre formation Réseaux & Télécommunications. Ce concours, organisé par le Ministère de l'Éducation Nationale, représente une belle opportunité de mettre en avant notre département et ses débouchés.",
+                                video: {
+                                    url: "https://www.youtube.com/watch?v=addZoPmH9bc",
+                                    legende: "Notre vidéo de présentation de la formation"
+                                }
                             },
-                        ],
-                        lienDemo: "https://www.parcoursmetiers.tv/video/16207-la-rochelle-en-reseau"
+                            {
+                                titre: "Résultats et reconnaissance",
+                                texte: "Nous sommes fiers d'annoncer que notre vidéo a été récompensée par un trophée bronze ! Cette distinction témoigne de notre engagement et du travail fourni pour valoriser notre formation.",
+                                image: {
+                                    url: "img/concours-je-filme-ma-formation-photo.jpg",
+                                    alt: "Photo au Grand Rex",
+                                    legende: "Notre équipe au Grand Rex lors de la diffusion"
+                                }
+                            },
+                            {
+                                titre: "Support de communication",
+                                texte: "Pour promouvoir notre participation, nous avons également créé des supports de communication.",
+                                image: {
+                                    url: "img/recto_JFMF.png",
+                                    alt: "Fascicule de promotion",
+                                    legende: "Fascicule de promotion du projet (recto)"
+                                }
+                            }
+                        ]
                     },
                     {
                         id: 3,
@@ -392,10 +763,39 @@
                         description: "Création d'une vidéo présentant la formation du BUT Réseaux et Télécommunication",
                         imageCouverture: "img/JFMF_8.jpg",
                         periode: "Novembre - Février 2025",
-                        detailsComplets: "Nous avons participé au concours national Je filme ma formation en tant qu étudiants de l'IUT de La Rochelle, avec notre équipe composée de Louka, Ewen, Lise, Aymeric et Paul ainsi que Garance. Ensemble, nous avons créé une vidéo pédagogique pour présenter notre formation Réseaux & Télécommunications. Ce concours, organisé par le Ministère de l'Éducation Nationale, représente une belle opportunité de mettre en avant notre département et ses débouchés. Nous sommes fiers d'annoncer que notre vidéo a été récompensée par un trophée bronze ! Cette distinction témoigne de notre engagement et du travail fourni pour valoriser notre formation. Cependant ce fut la deuxième fois que nous participons au concours et avons donc améliorer significativement la qualité de la vidéo et notre approche.",
                         technologies: ["Écriture de script", "Storytelling", "Créativité", "Adaptabilité", "Communication"],
-                        lienDemo: "https://www.parcoursmetiers.tv/video/17994-cybert-la-rochelle"
-                    }
+                        lienDemo: "https://www.parcoursmetiers.tv/video/17994-cybert-la-rochelle",
+                        
+                        contenuDetaille: [
+                            {
+                                titre: "Contexte du projet",
+                                texte: "Deuxième participation au concours national Je filme ma formation avec notre équipe composée de Louka, Ewen, Lise, Aymeric, Paul et Garance."
+                            },
+                            {
+                                titre: "Approche et réalisation",
+                                texte: "Pour cette seconde participation, nous avons significativement amélioré notre approche et la qualité de la vidéo, en nous appuyant sur notre expérience précédente.",
+                                video: {
+                                    url: "https://www.youtube.com/embed/17994-cybert-la-rochelle",
+                                    legende: "Notre vidéo de présentation pour la saison 9"
+                                }
+                            },
+                            {
+                                titre: "Résultats et impact",
+                                texte: "Nous avons été récompensés par un trophée bronze, confirmant la qualité de notre travail et notre capacité à valoriser notre formation."
+                            }
+                        ]
+                    },
+                    {
+                        id: 4,
+                        titre: "StudyTime",
+                        description: "Application de gestion du temps d'étude",
+                        imageCouverture: "img/Travaux.jpeg",
+                        periode: " En cours de Développement ",
+                        technologies: ["Programmation", "Application", "js"],
+                        
+                        // Conservez les données existantes pour la rétrocompatibilité
+                        detailsComplets: "Création d'une application afin de faciliter on organisation.",
+                    },
                 ],
                 projetSelectionne: null,
                 ouvrirProjetDetails(projet) {
